@@ -1,15 +1,9 @@
-from guardrails.hub import BiasCheck # type: ignore
-from guardrails import Guard # type: ignore
-try:
-  # Create a guard with BiasCheck filter
-  guard = Guard().use(BiasCheck(on_fail="exception",threshold=0.9))
+from validator.Bias_validator import BiasValidator
 
-  # Suppose LLM returns a message
-  # output = "You are a beautiful person!"
-  output="your a good bad person"
+if __name__ == "__main__":
+    text = input("Enter text: ")
 
-  res = guard.validate(output)  # This will raise or fail because BiasCheck found
+    validator = BiasValidator()
+    result = validator.validate(text)
 
-  print(res.validation_passed)
-except Exception as e:
-  print(e)
+    print(result)

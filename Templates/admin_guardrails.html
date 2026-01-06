@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SBP Guardrails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+    <h1>SBP GUARDRAILS</h1>
+    <div class="user">
+       <strong>Welcome {{ name }}</strong> <br>
+        <a href="{{ url_for('hello_world') }}">Logout</a>
+    </div>
+</div>
+
+<p class="subtitle"><strong>Choose all GuardRails that you want to enable</strong></p>
+
+<form method="POST" action="{{ url_for('submit_guardrails') }}">
+<div class="options">
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "bannedwords"  data-name = "Banned Words" onchange="updateSelected()"> Banned Words <br><span>Validates that the output does not contain banned words.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "bias" data-name = "Bias Check" onchange="updateSelected()"> Bias Check <br><span>Validates that the text is free from biases related to age, gender, sex, ethnicity, religion, etc.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "competitor" data-name = "Competitor Check" onchange="updateSelected()"> Competitor Check <br><span>Flags mentions of competitors and fixes responses by filtering out competitor names.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "cucumberexp" data-name = "Cucumber Expression Match" onchange="updateSelected()"> Cucumber Expression Match <br><span>Validates that the input string matches a specified cucumber expression.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "detectpii" data-name = "Detect PII" onchange="updateSelected()"> Detect PII <br><span>Detects personally identifiable information (PII) in text.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "url" data-name = "Has Valid URL" onchange="updateSelected()"> Has Valid URL <br><span>Ensures generated content contains a valid URL.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "profanity" data-name = "Profanity Free" onchange="updateSelected()"> Profanity Free <br><span>Checks for profanity in text.</span>
+    </div>
+    <div class="option">
+        <input type="checkbox" name = "guardrails" value = "secret" data-name = "Secrets Present" onchange="updateSelected()"> Secrets Present <br><span>Detects secrets such as API keys using common patterns.</span>
+    </div>
+</div>
+
+
+<div class="selected-box">
+    <strong>Selected modules:</strong>
+    <p id="selectedText"></p>
+</div>
+
+<button type="submit" class="submit-btn">Submit</button>
+</form>
+
+
+<script>
+function updateSelected() {
+    const checkboxes = document.querySelectorAll('input[name="guardrails"]');
+    let selectedNames = [];
+
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            selectedNames.push(cb.dataset.name);
+        }
+    });
+
+    document.getElementById("selectedText").innerText = selectedNames.join(", ");
+}
+</script>
+
+
+</body>
+</html>
