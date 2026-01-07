@@ -76,3 +76,14 @@ body {
     margin-top: 8px;
     font-size: 14px;
 }
+
+.text-input {
+    margin-top: 8px;
+    padding: 8px;
+    width: 95%;      
+    height: 38px; 
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
