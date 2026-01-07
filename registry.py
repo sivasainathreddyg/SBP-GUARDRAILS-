@@ -5,6 +5,7 @@ from validator.cucumber_validator import CucumberValidator
 from validator.profanity_validator import ProfanityValidator
 from validator.pii_validator import PIIDetector
 from validator.BannedWords_validator import BannedWordsValidator
+from validator.competitor_validator import CompetitorValidator
 from cucumber_expressions.parameter_type import ParameterType
 
 
@@ -21,5 +22,6 @@ VALIDATOR_REGISTRY={
     "cucumberexp":cucumber_validator,
     "profanity":ProfanityValidator(),
     "detectpii":PIIDetector(),
-    "bannedwords":BannedWordsValidator()
+    "bannedwords":BannedWordsValidator(),
+    "competitor":CompetitorValidator()
 }
