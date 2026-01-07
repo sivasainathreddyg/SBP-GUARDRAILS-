@@ -1,0 +1,5 @@
+google
+microsoft
+amazon
+openai
+meta
