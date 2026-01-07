@@ -1,0 +1,24 @@
+{
+    "text": "API_KEY: DIFUIADHVI37876454",
+    "selected_guardrails": [
+        "url",
+        "secret"
+    ],
+    "results": [
+        {
+            "validator": "url",
+            "result": {
+                "status": "fail",
+                "type": "invalid_url"
+            }
+        },
+        {
+            "validator": "secret",
+            "result": {
+                "status": "fail",
+                "type": "secret_detected"
+            }
+        }
+    ],
+    "final_status": true
+}

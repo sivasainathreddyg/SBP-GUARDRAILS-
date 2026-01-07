@@ -1,0 +1,30 @@
+{
+    "text": "I like banana",
+    "selected_guardrails": [
+        "bannedwords",
+        "bias"
+    ],
+    "results": [
+        {
+            "validator": "bannedwords",
+            "result": {
+                "status": "success",
+                "message": "Banned word detected",
+                "passed": false,
+                "details": {
+                    "input_word": "i",
+                    "matched_term": "cocaine",
+                    "score": 90.0
+                }
+            }
+        },
+        {
+            "validator": "bias",
+            "result": {
+                "message": "No bias detected",
+                "passed": true
+            }
+        }
+    ],
+    "final_status": false
+}

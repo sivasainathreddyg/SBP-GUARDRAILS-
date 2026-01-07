@@ -1,0 +1,24 @@
+{
+    "text": "men are greater than women",
+    "selected_guardrails": [
+        "url",
+        "secret"
+    ],
+    "results": [
+        {
+            "validator": "url",
+            "result": {
+                "status": "fail",
+                "type": "invalid_url"
+            }
+        },
+        {
+            "validator": "secret",
+            "result": {
+                "status": "pass",
+                "type": "no_secret"
+            }
+        }
+    ],
+    "final_status": true
+}

@@ -1,0 +1,16 @@
+{
+    "text": "men are greater than women",
+    "selected_guardrails": [
+        "bias"
+    ],
+    "results": [
+        {
+            "validator": "bias",
+            "result": {
+                "message": "Bias detected",
+                "passed": false
+            }
+        }
+    ],
+    "final_status": false
+}

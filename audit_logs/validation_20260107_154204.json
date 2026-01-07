@@ -1,0 +1,25 @@
+{
+    "text": "men are greater than women",
+    "selected_guardrails": [
+        "bannedwords",
+        "bias"
+    ],
+    "results": [
+        {
+            "validator": "bannedwords",
+            "result": {
+                "status": "success",
+                "message": "No banned words detected",
+                "passed": true
+            }
+        },
+        {
+            "validator": "bias",
+            "result": {
+                "message": "Bias detected",
+                "passed": false
+            }
+        }
+    ],
+    "final_status": false
+}
