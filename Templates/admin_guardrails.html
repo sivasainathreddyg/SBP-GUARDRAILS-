@@ -32,17 +32,27 @@
         <input type="checkbox" name = "guardrails" value = "cucumberexp" data-name = "Cucumber Expression Match" onchange="updateSelected()"> Cucumber Expression Match <br><span>Validates that the input string matches a specified cucumber expression.</span>
     </div>
     <div class="option">
-        <input type="checkbox" name = "guardrails" value = "detectpii" data-name = "Detect PII" onchange="updateSelected()"> Detect PII <br><span>Detects personally identifiable information (PII) in text.</span>
+    <input type="checkbox" name="guardrails" value="detectpii" data-name="Detect PII"
+           onchange="updateSelected(); togglePII(this)"> Detect PII <br>
+    <span>Detects personally identifiable information (PII) in text.</span>
+
+    <div class="sublist" id="piiSublist">
+    <label><input type="checkbox" name="sub_detectpii" value="email" onchange="updateSelected()"> Email</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="phone" onchange="updateSelected()"> Phone</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="aadhaar" onchange="updateSelected()"> Aadhaar</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="ip_address" onchange="updateSelected()"> IP_Address</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="date_time" onchange="updateSelected()"> Date_Time</label>
     </div>
-    <div class="option">
-        <input type="checkbox" name = "guardrails" value = "url" data-name = "Has Valid URL" onchange="updateSelected()"> Has Valid URL <br><span>Ensures generated content contains a valid URL.</span>
     </div>
-    <div class="option">
-        <input type="checkbox" name = "guardrails" value = "profanity" data-name = "Profanity Free" onchange="updateSelected()"> Profanity Free <br><span>Checks for profanity in text.</span>
-    </div>
-    <div class="option">
-        <input type="checkbox" name = "guardrails" value = "secret" data-name = "Secrets Present" onchange="updateSelected()"> Secrets Present <br><span>Detects secrets such as API keys using common patterns.</span>
-    </div>
+        <div class="option">
+            <input type="checkbox" name = "guardrails" value = "url" data-name = "Has Valid URL" onchange="updateSelected()"> Has Valid URL <br><span>Ensures generated content contains a valid URL.</span>
+        </div>
+        <div class="option">
+            <input type="checkbox" name = "guardrails" value = "profanity" data-name = "Profanity Free" onchange="updateSelected()"> Profanity Free <br><span>Checks for profanity in text.</span>
+        </div>
+        <div class="option">
+            <input type="checkbox" name = "guardrails" value = "secret" data-name = "Secrets Present" onchange="updateSelected()"> Secrets Present <br><span>Detects secrets such as API keys using common patterns.</span>
+        </div>
 </div>
 
 
@@ -51,25 +61,40 @@
     <p id="selectedText"></p>
 </div>
 
+
 <button type="submit" class="submit-btn">Submit</button>
+</form>
 </form>
 
 
 <script>
 function updateSelected() {
-    const checkboxes = document.querySelectorAll('input[name="guardrails"]');
-    let selectedNames = [];
+    const parents = document.querySelectorAll('input[name="guardrails"]');
+    let output = [];
 
-    checkboxes.forEach(cb => {
-        if (cb.checked) {
-            selectedNames.push(cb.dataset.name);
+    parents.forEach(p => {
+        if (p.checked) {
+            const name = p.dataset.name;
+            const subKey = "sub_" + p.value;
+            const subs = document.querySelectorAll(`input[name="${subKey}"]:checked`);
+
+            if (subs.length > 0) {
+                let subNames = [];
+                subs.forEach(s => subNames.push(s.value));
+                output.push(`${name} (${subNames.join(", ")})`);
+            } else {
+                output.push(name);
+            }
         }
     });
 
-    document.getElementById("selectedText").innerText = selectedNames.join(", ");
+    document.getElementById("selectedText").innerText = output.join(", ");
+}
+
+function togglePII(checkbox) {
+    const sublist = document.getElementById("piiSublist");
+    sublist.style.display = checkbox.checked ? "block" : "none";
 }
 </script>
-
-
 </body>
 </html>

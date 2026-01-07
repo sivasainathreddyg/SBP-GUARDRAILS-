@@ -32,10 +32,26 @@ def admin_guardrails(name):
 def submit_guardrails():
     selected = request.form.getlist('guardrails')
 
+    structured = []
+
+    for val in selected:
+        sub_key = f"sub_{val}"
+        subs = request.form.getlist(sub_key)
+
+        if subs:
+            block = val + "[\n" + ",\n".join(subs) + "\n]"
+            structured.append(block)
+        else:
+            structured.append(val)
+
+    output = ",\n".join(structured)
+
     with open(FILE_PATH, 'w') as f:
-        f.write(','.join(selected))
-    print("Written to:", FILE_PATH)
+        f.write(output)
+
     return redirect(url_for('admin_guardrails', name='admin'))
+
+
 
 
 

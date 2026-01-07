@@ -69,3 +69,10 @@ body {
 .submit-btn:hover {
     background: #083f56;
 }
+
+.sublist {
+    display: none;
+    margin-left: 25px;
+    margin-top: 8px;
+    font-size: 14px;
+}
