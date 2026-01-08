@@ -48,9 +48,10 @@ body {
  
 .selected-box {
     border: 2px solid green;
-    margin: 30px 40px;
+    /* margin: 30px 40px; */
     padding: 20px;
     min-height: 100px;
+    width:100%;
 }
  
 .submit-btn {
@@ -81,7 +82,7 @@ body {
     margin-top: 8px;
     padding: 8px;
     width: 95%;      
-    height: 38px;     /* makes it taller */
+    height: 38px; 
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
