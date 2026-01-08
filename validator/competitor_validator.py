@@ -13,6 +13,7 @@ class CompetitorValidator:
         self.competitors_path = os.path.join(base_dir, competitors_file)
 
         self.competitors = self._load_competitors()
+        print(competitors_file)
 
     def _load_competitors(self):
         if not os.path.exists(self.competitors_path):
@@ -26,6 +27,7 @@ class CompetitorValidator:
             ]
 
     def validate(self, text: str):
+        self.competitors = self._load_competitors()
         if not text or not isinstance(text, str):
             return {
                 "message": "Invalid input",
