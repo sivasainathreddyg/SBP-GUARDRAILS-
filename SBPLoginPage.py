@@ -28,14 +28,10 @@ def admin_guardrails(name):
     success = request.args.get('success')
 
     competitors = []
-    try:
-        with open(os.path.join(DATA_DIR, 'competitors.txt')) as f:
-            competitors = [line.strip() for line in f if line.strip()]
-    except FileNotFoundError:
-        print("❌ competitors.txt not found")
-
-    print(">>> Competitors loaded:", competitors)
-
+  
+    with open(os.path.join(DATA_DIR, 'competitors.txt')) as f:
+        competitors = [line.strip() for line in f if line.strip()]
+    
     return render_template(
         'admin_guardrails.html',
         name=name,
@@ -53,6 +49,7 @@ def submit_guardrails():
 
     detect_pii_subs = []
     selected_competitors = []
+    codefinder_subs = []
 
     for val in selected:
         subs = request.form.getlist(f"sub_{val}")
@@ -68,23 +65,32 @@ def submit_guardrails():
                 selected_competitors.append(txt.strip())
             structured.append(val)
 
+        elif val == 'codefinder':
+            codefinder_subs = subs
+            structured.append(val)
+
         else:
             if subs:
                 structured.append(val + "[\n" + ",\n".join(subs) + "\n]")
             else:
                 structured.append(val)
 
-    # 🔹 Write selected parent guardrails only
+    # Write selected parent guardrails only
     with open(FILE_PATH, 'w') as f:
         f.write(",\n".join(structured))
 
-    # 🔹 Write Detect PII sub-options
+    # Write Detect PII sub-options
     detect_pii_file = os.path.join(DATA_DIR, 'detectPII.txt')
     with open(detect_pii_file, 'w') as f:
         for item in detect_pii_subs:
             f.write(item + "\n")
 
-    # 🔹 Sync competitors.txt
+    # Write code finder sub-list
+    with open(os.path.join(DATA_DIR, 'CodeFinder.txt'), 'w') as f:
+        for x in codefinder_subs:
+            f.write(x + "\n")
+
+    # code for competitors.txt
     if selected_competitors:
         comp_file = os.path.join(DATA_DIR, 'competitors.txt')
 

@@ -77,6 +77,15 @@
         <div class="option">
             <input type="checkbox" name = "guardrails" value = "secret" data-name = "Secrets Present" onchange="updateSelected()"> Secrets Present <br><span>Detects secrets such as API keys using common patterns.</span>
         </div>
+
+        <div class="option">
+        <input type="checkbox" name="guardrails" value="codefinder" data-name="Code Finder" onchange="updateSelected(); toggleCode(this)"> Code Finder<br>
+        <span>Ensures content does not contain any code.</span>
+        <div class="sublist" id="codeSublist">
+        <label><input type="checkbox" name="sub_codefinder" value="python" onchange="updateSelected()"> Python</label><br>
+        <label><input type="checkbox" name="sub_codefinder" value="java" onchange="updateSelected()"> Java</label><br>
+        <label><input type="checkbox" name="sub_codefinder" value="c++" onchange="updateSelected()"> C++</label><br>
+        </div>
 </div>
 
 
@@ -119,6 +128,12 @@ function updateSelected() {
 //function for detectPII sub-list
 function togglePII(checkbox) {
     const sublist = document.getElementById("piiSublist");
+    sublist.style.display = checkbox.checked ? "block" : "none";
+}
+
+//function for codeFinder sub-list
+function toggleCode(checkbox) {
+    const sublist = document.getElementById("codeSublist");
     sublist.style.display = checkbox.checked ? "block" : "none";
 }
 
