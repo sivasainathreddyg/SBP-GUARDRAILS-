@@ -25,32 +25,85 @@ def form_login():
 # admin page routing
 @app.route('/admin_guardrails/<name>')
 def admin_guardrails(name):
-    return render_template('admin_guardrails.html', name=name)
+    success = request.args.get('success')
+
+    competitors = []
+    try:
+        with open(os.path.join(DATA_DIR, 'competitors.txt')) as f:
+            competitors = [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        print("❌ competitors.txt not found")
+
+    print(">>> Competitors loaded:", competitors)
+
+    return render_template(
+        'admin_guardrails.html',
+        name=name,
+        competitors=competitors,
+        success=success
+    )
+
+
 
 # handles submit and file storage
 @app.route('/submit_guardrails', methods=['POST'])
 def submit_guardrails():
     selected = request.form.getlist('guardrails')
-
     structured = []
 
-    for val in selected:
-        sub_key = f"sub_{val}"
-        subs = request.form.getlist(sub_key)
+    detect_pii_subs = []
+    selected_competitors = []
 
-        if subs:
-            block = val + "[\n" + ",\n".join(subs) + "\n]"
-            structured.append(block)
-        else:
+    for val in selected:
+        subs = request.form.getlist(f"sub_{val}")
+        txt = request.form.get(f"input_{val}")
+
+        if val == 'detectpii':
+            detect_pii_subs = subs
             structured.append(val)
 
-    output = ",\n".join(structured)
+        elif val == 'competitor':
+            selected_competitors.extend(subs)
+            if txt:
+                selected_competitors.append(txt.strip())
+            structured.append(val)
 
+        else:
+            if subs:
+                structured.append(val + "[\n" + ",\n".join(subs) + "\n]")
+            else:
+                structured.append(val)
+
+    # 🔹 Write selected parent guardrails only
     with open(FILE_PATH, 'w') as f:
-        f.write(output)
-        
+        f.write(",\n".join(structured))
+
+    # 🔹 Write Detect PII sub-options
+    detect_pii_file = os.path.join(DATA_DIR, 'detectPII.txt')
+    with open(detect_pii_file, 'w') as f:
+        for item in detect_pii_subs:
+            f.write(item + "\n")
+
+    # 🔹 Sync competitors.txt
+    if selected_competitors:
+        comp_file = os.path.join(DATA_DIR, 'competitors.txt')
+
+        cleaned = []
+        seen = set()
+        for c in selected_competitors:
+            c = c.strip()
+            if c and c.lower() not in seen:
+                seen.add(c.lower())
+                cleaned.append(c)
+
+        with open(comp_file, 'w') as f:
+            for c in cleaned:
+                f.write(c + "\n")
 
     return redirect(url_for('admin_guardrails', name='admin'))
+
+
+
 
 
 
