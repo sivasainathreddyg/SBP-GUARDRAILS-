@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import re
+
 
 app = Flask(__name__)
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
@@ -26,6 +29,8 @@ def form_login():
 @app.route('/admin_guardrails/<name>')
 def admin_guardrails(name):
     success = request.args.get('success')
+    nothing = request.args.get('nothing')
+    cucumber_error = request.args.get('cucumber_error')
 
     competitors = []
   
@@ -36,7 +41,9 @@ def admin_guardrails(name):
         'admin_guardrails.html',
         name=name,
         competitors=competitors,
-        success=success
+        success=success,
+        nothing=nothing,
+        cucumber_error=cucumber_error
     )
 
 
@@ -45,8 +52,13 @@ def admin_guardrails(name):
 @app.route('/submit_guardrails', methods=['POST'])
 def submit_guardrails():
     selected = request.form.getlist('guardrails')
-    structured = []
 
+
+    # If none required OR nothing selected
+    if not selected:
+        return redirect(url_for('admin_guardrails', name='admin', nothing=1))
+    
+    structured = []
     detect_pii_subs = []
     selected_competitors = []
     codefinder_subs = []
@@ -69,6 +81,15 @@ def submit_guardrails():
             codefinder_subs = subs
             structured.append(val)
 
+        elif val == 'cucumberexp':
+            if not txt or not is_valid_cucumber(txt):
+                return redirect(url_for('admin_guardrails', name='admin', cucumber_error=1))
+
+           # Write Cucumber in txt file
+            with open(os.path.join(DATA_DIR, 'CucumberExpression.txt'), 'w') as f:
+                    f.write(txt.strip())
+                    structured.append(val)
+
         else:
             if subs:
                 structured.append(val + "[\n" + ",\n".join(subs) + "\n]")
@@ -90,6 +111,7 @@ def submit_guardrails():
         for x in codefinder_subs:
             f.write(x + "\n")
 
+
     # code for competitors.txt
     if selected_competitors:
         comp_file = os.path.join(DATA_DIR, 'competitors.txt')
@@ -106,10 +128,36 @@ def submit_guardrails():
             for c in cleaned:
                 f.write(c + "\n")
 
-    return redirect(url_for('admin_guardrails', name='admin'))
+    return redirect(url_for('admin_guardrails', name='admin', success=1))
 
 
 
+
+#Function for cucumber expression
+def is_valid_cucumber(expr):
+    if not expr:
+        return False
+
+    # Must contain at least one placeholder
+    if not re.search(r'\{(int|float|word|string|positive_number|negative_number)\}', expr):
+        return False
+
+    # Try converting to regex and compiling
+    try:
+        regex = cucumber_to_regex(expr)
+        re.compile(regex)
+        return True
+    except re.error:
+        return False
+
+
+def cucumber_to_regex(expr):
+    expr = re.escape(expr)
+    expr = expr.replace(r'\{word\}', r'(\w+)')
+    expr = expr.replace(r'\{int\}', r'(\d+)')
+    expr = expr.replace(r'\{float\}', r'([\d.]+)')
+    expr = expr.replace(r'\{string\}', r'"([^"]*)"')
+    return '^' + expr + '$'
 
 
 

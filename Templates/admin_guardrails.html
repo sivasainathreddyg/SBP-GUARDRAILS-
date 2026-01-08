@@ -20,6 +20,8 @@
 <form method="POST" action="{{ url_for('submit_guardrails') }}">
 <div class="options">
 
+
+
     <div class="option">
         <input type="checkbox" name = "guardrails" value = "bannedwords"  data-name = "Banned Words" onchange="updateSelected()"> Banned Words <br><span>Validates that the output does not contain banned words.</span>
     </div>
@@ -50,7 +52,7 @@
     <div class="option">
         <input type="checkbox" name="guardrails" value="cucumberexp" data-name="Cucumber Expression Match" onchange="updateSelected(); toggleInput(this)">Cucumber Expression Match<br>
         <span>Validates that the input string matches a specified cucumber expression.</span>
-        <input type="text" class="text-input" name="input_cucumberexp" placeholder="Enter cucumber expression:" style="display:none;">
+        <input type="text" class="text-input" name="input_cucumberexp" placeholder="Example: I bought {positive_number} apples" style="display:none;">
     </div>
 
 
@@ -87,6 +89,8 @@
         <label><input type="checkbox" name="sub_codefinder" value="c++" onchange="updateSelected()"> C++</label><br>
         </div>
 </div>
+
+
 
 
 <div class="selected-box">
@@ -170,5 +174,25 @@ function toggleCompetitor(checkbox) {
 
 
 </script>
+{% if success %}
+<script>
+    alert("Successfully Submitted!");
+    window.history.replaceState({}, document.title, "{{ url_for('admin_guardrails', name=name) }}");
+</script>
+{% endif %}
+
+{% if nothing %}
+<script>
+    alert("Nothing has been selected");
+    window.history.replaceState({}, document.title, "{{ url_for('admin_guardrails', name=name) }}");
+</script>
+{% endif %}
+
+{% if cucumber_error %}
+<script>
+    alert("Invalid Cucumber Expression format. Please correct it.");
+    window.history.replaceState({}, document.title, "{{ url_for('admin_guardrails', name=name) }}");
+</script>
+{% endif %}
 </body>
 </html>
