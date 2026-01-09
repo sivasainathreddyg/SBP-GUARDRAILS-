@@ -8,12 +8,14 @@
 <body>
 
 <div class="header">
+    <img src="{{ url_for('static', filename='SBP-Logo.png') }}" class="logo">
     <h1>SBP GUARDRAILS</h1>
     <div class="user">
        <strong>Welcome {{ name }}</strong> <br>
         <a href="{{ url_for('hello_world') }}">Logout</a>
     </div>
 </div>
+
 
 <p class="subtitle"><strong>Choose all GuardRails that you want to enable</strong></p>
 
@@ -64,7 +66,8 @@
     <label><input type="checkbox" name="sub_detectpii" value="PHONE_NUMBER" onchange="updateSelected()"> Phone</label><br>
     <label><input type="checkbox" name="sub_detectpii" value="IN_AADHAAR" onchange="updateSelected()"> Aadhaar</label><br>
     <label><input type="checkbox" name="sub_detectpii" value="IP_ADDRESS" onchange="updateSelected()"> IP_Address</label><br>
-    <label><input type="checkbox" name="sub_detectpii" value="DATE_TIME" onchange="updateSelected()"> Date_Time</label>
+    <label><input type="checkbox" name="sub_detectpii" value="DATE_TIME" onchange="updateSelected()"> Date_Time</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="PASSWORD" onchange="updateSelected()"> Password</label>
     </div>
 
     </div>
@@ -101,7 +104,7 @@
 
 <button type="submit" class="submit-btn">Submit</button>
 </form>
-</form>
+<!-- </form> -->
 
 
 <script>
