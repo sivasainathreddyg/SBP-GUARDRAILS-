@@ -57,14 +57,14 @@
 
 
     <div class="option">
-        <input type="checkbox" name="guardrails" value="detectpii" data-name="Detect PII" onchange="updateSelected(); togglePII(this)"> Detect PII <br>
+        <input type="checkbox" name="guardrails" value="detectpii" data-name="Detect PII" onchange="updateSelected(); togglePII(this); selectAllPII(this)"> Detect PII <br>
         <span>Detects personally identifiable information (PII) in text.</span>
     <div class="sublist" id="piiSublist">
-    <label><input type="checkbox" name="sub_detectpii" value="email" onchange="updateSelected()"> Email</label><br>
-    <label><input type="checkbox" name="sub_detectpii" value="phone" onchange="updateSelected()"> Phone</label><br>
-    <label><input type="checkbox" name="sub_detectpii" value="aadhaar" onchange="updateSelected()"> Aadhaar</label><br>
-    <label><input type="checkbox" name="sub_detectpii" value="ip_address" onchange="updateSelected()"> IP_Address</label><br>
-    <label><input type="checkbox" name="sub_detectpii" value="date_time" onchange="updateSelected()"> Date_Time</label>
+    <label><input type="checkbox" name="sub_detectpii" value="EMAIL_ADDRESS" onchange="updateSelected()"> Email</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="PHONE_NUMBER" onchange="updateSelected()"> Phone</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="IN_AADHAAR" onchange="updateSelected()"> Aadhaar</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="IP_ADDRESS" onchange="updateSelected()"> IP_Address</label><br>
+    <label><input type="checkbox" name="sub_detectpii" value="DATE_TIME" onchange="updateSelected()"> Date_Time</label>
     </div>
 
     </div>
@@ -133,6 +133,20 @@ function updateSelected() {
 function togglePII(checkbox) {
     const sublist = document.getElementById("piiSublist");
     sublist.style.display = checkbox.checked ? "block" : "none";
+}
+
+//function to auto-select detectPII sub-list
+function selectAllPII(parentCheckbox) {
+    const container = parentCheckbox.closest('.option');
+    const subs = container.querySelectorAll('input[name="sub_detectpii"]');
+
+    if (parentCheckbox.checked) {
+        subs.forEach(cb => cb.checked = true);
+    } else {
+        subs.forEach(cb => cb.checked = false);
+    }
+
+    updateSelected();
 }
 
 //function for codeFinder sub-list
